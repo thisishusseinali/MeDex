@@ -67,20 +67,53 @@ def heart_predictor(values_list):
     return prediction
 
 def malaria_predictor(file_path):
-    data = image.load_img(full_path, target_size=(50, 50, 3))
+    data = image.load_img(file_path, target_size=(50, 50, 3))
     data = np.expand_dims(data, axis=0)
     data = data * 1.0 / 255
-    predicted = malaria_model.predict(data)
-    return predicted[0]
+    result = malaria_model.predict(data)
+    indices = {0: 'PARASITIC', 1: 'Uninfected', 2: 'Invasive carcinomar', 3: 'Normal'}
+    print(result)
+    predicted_class = np.argmax(result, axis=1)
+    accuracy = np.round(result[0][predicted_class] * 100, 2)
+    label = indices[predicted_class[0]]
+    return label,'\n',accuracy
+# D:\Gradution Project\project\ML-MT\uploads\test.png
+    """
+    indices = {0: 'PARASITIC', 1: 'Uninfected', 2: 'Invasive carcinomar', 3: 'Normal'}
+    result = predicted
+    print(result)
+    x = 
+    #predicted_class = result.astype(int)
+    #np.argmax(result,axis=1)
+    accuracy = np.round(result[0][predicted_class] * 100, 2)
+    label = indices[predicted_class]
+    return label,'\n',accuracy
+    #####
+    indices = {0: 'PARASITIC', 1: 'Uninfected', 2: 'Invasive carcinomar', 3: 'Normal'}
+    print(result)
+    predicted_class = np.asscalar(np.argmax(result, axis=1))
+    accuracy = round(result[0][predicted_class] * 100, 2)
+    label = indices[predicted_class]
+    
+    """
 
 def pneumonia_predictor(file_path):
-    data = image.load_img(full_path, target_size=(64, 64, 3))
+    data = image.load_img(file_path, target_size=(64, 64, 3))
     data = np.expand_dims(data, axis=0)
     data = data * 1.0 / 255
     predicted = pneumonia_model.predict(data)
-    return predicted[0]
+    indices = {0: 'Normal', 1: 'Pneumonia'}
+    result = predicted
 
-
+    if(result>50):
+        label= indices[1]
+        accuracy= result
+    else:
+        label= indices[0]
+        accuracy= 100-result
+    return label
+    return accuracy
+    
 if __name__=="__main__":
     print("""TheClinic App predictor [listed test numbers ]\n
           1_ diabetes  test\n
@@ -115,11 +148,9 @@ if __name__=="__main__":
     elif(choose == 6):
         file_path = input("Enter the file path : ")
         print(malaria_predictor(file_path))
-        
     elif(choose == 7):
         file_path = input("Enter the file path : ")
-        print(pneumonia_predictor(values))
-        
+        print(pneumonia_predictor(file_path))
     else:
         print('Error ! sorry .')
         
