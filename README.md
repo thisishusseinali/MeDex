@@ -1,1 +1,1 @@
-# MeDex (Medical Examination APP)
+# MeDex (Medical Examination)
